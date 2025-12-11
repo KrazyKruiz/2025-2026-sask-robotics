@@ -1,0 +1,35 @@
+
+#include <PRIZM_PRO.h>
+#include <TELEOP.h> // include the PRIZM Pro library in the sketch
+PRIZM prizm;              // instantiate a PRIZM object “prizm” so we can use its functions
+PS4 ps4; 
+void setup() {
+
+  prizm.PrizmBegin(); 
+  ps4.setDeadZone (LEFT,10);     // Sets a Left Joystick Dead Zone axis range of +/- 10 about center stick
+  ps4.setDeadZone(RIGHT,10);// initialize the PRIZM Pro controller
+}
+
+void loop() {     // repeat in a loop
+
+  ps4.getPS4();
+  if(ps4.Connected){
+    if(ps4.Button(UP)){
+      prizm.setCRServoState(1,100); 
+      prizm.setCRServoState(2,-100);  
+      delay(100);
+    }
+    else if(ps4.Button(DOWN)){
+      prizm.setCRServoState(1,-100); 
+      prizm.setCRServoState(2,100); 
+      delay(100); 
+    }
+    else {
+    prizm.setCRServoState(1,0, 20); 
+    prizm.setCRServoState(2,0, -20);  
+    }
+      
+ // prizm.PrizmEnd();                 
+ 
+}
+}
