@@ -1,0 +1,83 @@
+
+#include <PRIZM_PRO.h>
+#include <TELEOP.h> // include the PRIZM Pro library in the sketch
+PRIZM prizm;              // instantiate a PRIZM object “prizm” so we can use its functions
+PS4 ps4; 
+  int base_left = 90;
+  int base_right = 90;
+  int elbow = 90;
+  int PowerM1; 
+  int PowerM2; 
+  int PowerM3; 
+  int PowerM4; 
+void setup() {
+
+  prizm.PrizmBegin(); 
+
+  ps4.setDeadZone (LEFT,10);     // Sets a both Joystick Dead Zones axis range of +/- 10 about center stick
+  ps4.setDeadZone(RIGHT,10);
+}
+
+void loop() {     // repeat in a loop
+
+  ps4.getPS4();
+  if(ps4.Connected){
+       //motor and wheel LY is left stick and left wheels, vice versa
+       PowerM1 = ps4.Motor(LY);               
+       PowerM2 = ps4.Motor(RY);    
+       PowerM3 = ps4.Motor(LY);               
+       PowerM4 = ps4.Motor(RY);               
+       prizm.setMotorPowers(PowerM1, PowerM2, PowerM3, PowerM4);
+
+       if(ps4.Button(L1)){
+          //lowers base arm by 10 degrees
+          if (base_left >= 10 && base_right <= 170){
+              base_left -= 10;
+              base_right += 10;
+              prizm.setServoPosition(1,base_left);
+              prizm.setServoPosition(2,base_right);
+
+              delay(500);
+      }
+    }else if(ps4.Button(R1)){
+          //raises base arm by 10 degrees
+          if (base_left <= 170 && base_right >= 10){
+              base_left += 10;
+              base_right -= 10;
+              prizm.setServoPosition(1,base_left);
+              prizm.setServoPosition(2,base_right);
+
+              delay(500);
+            
+          }
+        }else if(ps4.Button(L2)){
+          //lowers elbow by 10 degrees
+          if (elbow <= 170){
+             elbow += 10;
+             prizm.setServoPosition(3,elbow);
+             delay(500);
+        }
+      }else if(ps4.Button(R2)){
+          //raises eblow by 10 degrees
+          if (elbow >= 10){
+            
+             elbow -= 10;
+             prizm.setServoPosition(3,elbow);
+             delay(500);
+          }
+      }else if(ps4.Button(CROSS)){
+          //opens claw
+             prizm.setServoPosition(4,170);
+             delay(500);
+        }else if(ps4.Button(CIRCLE)){
+          //opens claw
+             prizm.setServoPosition(4,10);
+             delay(500);
+             
+     }else if(ps4.Button(SQUARE)){
+      //end
+      prizm.PrizmEnd();                 
+ 
+}
+}
+}
