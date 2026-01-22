@@ -16,6 +16,8 @@ void setup() {
 
   ps4.setDeadZone (LEFT,10);     // Sets a both Joystick Dead Zones axis range of +/- 10 about center stick
   ps4.setDeadZone(RIGHT,10);
+  prizm.setMotorInvert(1,1);
+  prizm.setMotorInvert(3,1);
 }
 
 void loop() {     // repeat in a loop
